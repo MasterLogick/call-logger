@@ -64,5 +64,5 @@ INTERCEPT(free)
 //void free(void *__ptr);
 
 void __attribute__((constructor)) init_proxy_lib() {
-    arena = create_or_connect_to_arena("/log_arena",512);
+    arena = create_or_connect_to_arena(DEFAULT_ARENA_NAME, DEFAULT_ARENA_BUFFER_SIZE);
 }

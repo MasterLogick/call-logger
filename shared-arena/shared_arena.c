@@ -8,7 +8,7 @@
 
 log_entry_t *allocate_next_entry(shared_arena_t *arena) {
     assert(arena != NULL);
-    uint64_t index = ++arena->ring_pointer;
+    uint64_t index = ++arena->next_ring_entry;
     index %= arena->ring_buffer_size;
     return &arena->entries[index];
 }

@@ -9,7 +9,8 @@ extern "C"{
 #include <stdint.h>
 
 typedef enum call_id {
-    call_id_open = 0,
+    call_id_undefined = 0,
+    call_id_open,
     call_id_close,
     call_id_lseek,
     call_id_read,
@@ -30,14 +31,16 @@ typedef struct log_entry {
 
 typedef struct shared_arena {
     uint64_t ring_buffer_size;
-    _Atomic uint64_t ring_pointer;
+    _Atomic uint64_t next_ring_entry;
     log_entry_t entries[0];
 } shared_arena_t;
 
 log_entry_t *allocate_next_entry(shared_arena_t *arena);
 
-shared_arena_t *create_or_connect_to_arena(const char *arena_name, uint64_t ring_buffer_size);
+#define DEFAULT_ARENA_NAME "/log_arena"
+#define DEFAULT_ARENA_BUFFER_SIZE 512
 
+shared_arena_t *create_or_connect_to_arena(const char *arena_name, uint64_t ring_buffer_size);
 
 #ifdef __cplusplus
 }
