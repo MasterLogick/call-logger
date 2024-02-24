@@ -5,25 +5,24 @@
 #include <vector>
 #include <chrono>
 #include <fstream>
-#include "shared_arena.h"
+#include "SharedArena.h"
 
 class LogReader {
 
 public:
-    LogReader(std::vector<call_id_t> callIds, std::chrono::nanoseconds pollFrequency, const char *arenaName,
-              uint64_t arenaBufferSize);
+    LogReader(std::vector<CallId> callIds, std::chrono::nanoseconds pollFrequency, SharedArena* arena);
 
     void readTo(std::ofstream &logFile);
 
 private:
-    std::vector<call_id_t> callIds;
+    std::vector<CallId> callIds;
     std::chrono::nanoseconds pollFrequency;
-    shared_arena_t *arena;
+    SharedArena *arena;
     uint64_t ringBufferSize;
 
-    bool filterEntry(log_entry_t *entry);
+    bool filterEntry(LogEntry *entry);
 
-    void logEntry(log_entry_t *entry);
+    void logEntry(LogEntry *entry, std::ofstream &ofstream);
 };
 
 

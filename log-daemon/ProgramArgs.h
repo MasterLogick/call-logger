@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 #include <sstream>
-#include "shared_arena.h"
+#include "SharedArena.h"
 
 class ProgramArgs {
 
@@ -18,7 +18,7 @@ public:
         return pollFrequency;
     }
 
-    const std::vector<call_id_t> &getCallList() const {
+    const std::vector<CallId> &getCallList() const {
         return callList;
     }
 
@@ -31,10 +31,10 @@ public:
     }
 private:
     std::chrono::nanoseconds pollFrequency;
-    std::vector<call_id_t> callList;
+    std::vector<CallId> callList;
     std::string logFile;
     bool initialized;
-    static bool filterStringToCallIdsVector(const std::string &filter, std::vector<call_id_t> &callIds);
+    static bool filterStringToCallIdsVector(const std::string &filter, std::vector<CallId> &callIds);
 };
 
 

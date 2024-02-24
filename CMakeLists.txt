@@ -4,12 +4,12 @@ project(logger LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 20)
 
 add_library(shared-arena STATIC
-        shared-arena/shared_arena.h
-        shared-arena/shared_arena.c)
+        shared-arena/SharedArena.h
+        shared-arena/SharedArena.cpp)
 target_link_libraries(shared-arena PUBLIC rt)
 
 add_library(interceptor SHARED
-        interceptor/main.c
+        interceptor/main.cpp
 )
 target_include_directories(interceptor PRIVATE shared-arena)
 target_link_libraries(interceptor PRIVATE dl shared-arena)
@@ -22,6 +22,7 @@ add_executable(log-daemon
         log-daemon/LogReader.h
 )
 target_include_directories(log-daemon PRIVATE shared-arena)
+target_link_libraries(log-daemon PRIVATE shared-arena)
 
 add_executable(test-stand
         test-stand/main.c)

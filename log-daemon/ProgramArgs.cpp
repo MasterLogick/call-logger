@@ -22,17 +22,17 @@ ProgramArgs::ProgramArgs(int argc, char **argv) {
     initialized = true;
 }
 
-bool ProgramArgs::filterStringToCallIdsVector(const std::string &filter, std::vector<call_id_t> &callIds) {
+bool ProgramArgs::filterStringToCallIdsVector(const std::string &filter, std::vector<CallId> &callIds) {
     std::stringstream filterStream(filter);
     for (std::string call; std::getline(filterStream, call, ',');) {
-        if (call == "open") callIds.push_back(call_id_open);
-        else if (call == "close") callIds.push_back(call_id_close);
-        else if (call == "lseek") callIds.push_back(call_id_lseek);
-        else if (call == "read") callIds.push_back(call_id_read);
-        else if (call == "write") callIds.push_back(call_id_write);
-        else if (call == "malloc") callIds.push_back(call_id_malloc);
-        else if (call == "realloc") callIds.push_back(call_id_realloc);
-        else if (call == "free") callIds.push_back(call_id_free);
+        if (call == "open") callIds.push_back(CallId_open);
+        else if (call == "close") callIds.push_back(CallId_close);
+        else if (call == "lseek") callIds.push_back(CallId_lseek);
+        else if (call == "read") callIds.push_back(CallId_read);
+        else if (call == "write") callIds.push_back(CallId_write);
+        else if (call == "malloc") callIds.push_back(CallId_malloc);
+        else if (call == "realloc") callIds.push_back(CallId_realloc);
+        else if (call == "free") callIds.push_back(CallId_free);
         else return false;
     }
     return true;

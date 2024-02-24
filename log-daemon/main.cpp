@@ -1,6 +1,6 @@
 #include <iostream>
 #include <fstream>
-#include "shared_arena.h"
+#include "SharedArena.h"
 #include "ProgramArgs.h"
 #include "LogReader.h"
 
@@ -11,7 +11,12 @@ int main(int argc, char **argv) {
         return -1;
     }
     std::ofstream logFile(args.getLogFile());
-    LogReader reader(args.getCallList(), args.getPollFrequency(), DEFAULT_ARENA_NAME, DEFAULT_ARENA_BUFFER_SIZE);
+    SharedArena *arena = SharedArena::createOrConnect();
+    if (arena == nullptr) {
+        std::cout << "Failed to connect to shared log ring buffer" << std::endl;
+        return 1;
+    }
+    LogReader reader(args.getCallList(), args.getPollFrequency(), arena);
     reader.readTo(logFile);
     return 0;
 }
