@@ -15,13 +15,22 @@ static hooked_func FUNC_NAME##Func = nullptr;                                 \
                                                                               \
 void __attribute__((constructor)) FUNC_NAME##FindFunc() {                     \
     FUNC_NAME##Func = reinterpret_cast<hooked_func>                           \
-            (dlsym(RTLD_NEXT, #FUNC_NAME));                                   \
+            (dlsym(RTLD_NEXT, #FUNC_NAME));                                  \
+    if (FUNC_NAME##Func == nullptr) {                                         \
+        exit(-1);                                                             \
+    }                                                                         \
 }                                                                             \
                                                                               \
 extern "C" uint64_t FUNC_NAME##Hook(                                          \
         uint64_t arg0, uint64_t arg1, uint64_t arg2,                          \
         uint64_t arg3, uint64_t arg4, uint64_t arg5) {                        \
+    if (arena == nullptr) {                                                   \
+        arena = SharedArena::createOrConnect();                               \
+    }                                                                         \
     LogEntry *entry = arena->allocateNextEntry();                             \
+    if (FUNC_NAME##Func == nullptr) {                                         \
+        FUNC_NAME##FindFunc();                                                \
+    }                                                                         \
     BEFORE_CALL                                                               \
     uint64_t res = FUNC_NAME##Func(arg0, arg1, arg2, arg3, arg4, arg5);       \
     AFTER_CALL                                                                \
