@@ -24,13 +24,17 @@ struct LogEntry {
     CallId id;
     uint64_t args[6];
     uint64_t retVal;
+
+    union CallSpecificData {
+        char openPath[64];
+    } callSpecificData;
 };
 
 class SharedArena {
 public:
     SharedArena() = delete;
 
-    [[nodiscard]] static SharedArena *createOrConnect(const char *arenaName = "/log_arena", uint64_t ringBufferSize = 512);
+    static SharedArena *createOrConnect(const char *arenaName = "/log_arena", uint64_t ringBufferSize = 512);
 
     LogEntry *allocateNextEntry();
 

@@ -20,6 +20,8 @@ add_executable(log-daemon
         log-daemon/ProgramArgs.h
         log-daemon/LogReader.cpp
         log-daemon/LogReader.h
+        log-daemon/LogPrinters.h
+        log-daemon/LogPrinters.cpp
 )
 target_include_directories(log-daemon PRIVATE shared-arena)
 target_link_libraries(log-daemon PRIVATE shared-arena)

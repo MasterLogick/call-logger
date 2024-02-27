@@ -3,7 +3,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-[[nodiscard]] SharedArena *SharedArena::createOrConnect(const char *arenaName, uint64_t ringBufferSize) {
+SharedArena *SharedArena::createOrConnect(const char *arenaName, uint64_t ringBufferSize) {
     int fd = shm_open(arenaName, O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
     if (fd == -1) {
         return nullptr;

@@ -10,7 +10,7 @@ SharedArena *arena = SharedArena::createOrConnect();
 typedef uint64_t(*hooked_func)(uint64_t arg0, uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4,
                                uint64_t arg5);
 
-#define INTERCEPT(FUNC_NAME)                                                  \
+#define INTERCEPT_WITH_PROCESSING(FUNC_NAME, BEFORE_CALL, AFTER_CALL)         \
 static hooked_func FUNC_NAME##Func = nullptr;                                 \
                                                                               \
 void __attribute__((constructor)) FUNC_NAME##FindFunc() {                     \
@@ -21,9 +21,10 @@ void __attribute__((constructor)) FUNC_NAME##FindFunc() {                     \
 extern "C" uint64_t FUNC_NAME##Hook(                                          \
         uint64_t arg0, uint64_t arg1, uint64_t arg2,                          \
         uint64_t arg3, uint64_t arg4, uint64_t arg5) {                        \
-    uint64_t res = FUNC_NAME##Func(arg0, arg1, arg2, arg3, arg4, arg5);       \
-                                                                              \
     LogEntry *entry = arena->allocateNextEntry();                             \
+    BEFORE_CALL                                                               \
+    uint64_t res = FUNC_NAME##Func(arg0, arg1, arg2, arg3, arg4, arg5);       \
+    AFTER_CALL                                                                \
     strncpy(entry->procName, program_invocation_short_name,                   \
         sizeof(entry->procName));                                             \
     entry->procName[sizeof(entry->procName) - 1] = 0;                         \
@@ -41,7 +42,12 @@ extern "C" uint64_t FUNC_NAME##Hook(                                          \
 asm (".globl "#FUNC_NAME"\n"                                                  \
      ".set "#FUNC_NAME","#FUNC_NAME"Hook");
 
-INTERCEPT(open)
+#define INTERCEPT(NAME) INTERCEPT_WITH_PROCESSING(NAME,{},{})
+
+INTERCEPT_WITH_PROCESSING(open, {
+    char *name = reinterpret_cast<char *>(arg0);
+    strncpy(entry->callSpecificData.openPath, name, sizeof(entry->callSpecificData.openPath));
+}, {})
 //int open(const char *__file, int __oflag, ...);
 
 INTERCEPT(close)

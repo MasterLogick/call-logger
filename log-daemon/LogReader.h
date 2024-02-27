@@ -21,8 +21,6 @@ private:
     uint64_t ringBufferSize;
 
     bool filterEntry(LogEntry *entry);
-
-    void logEntry(LogEntry *entry, std::ofstream &ofstream);
 };
 
 
