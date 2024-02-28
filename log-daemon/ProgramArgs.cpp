@@ -8,7 +8,7 @@ ProgramArgs::ProgramArgs(int argc, char **argv) {
 
     char *pollFreqArgEnd = nullptr;
     long pollFrequencyNs = std::strtol(argv[2], &pollFreqArgEnd, 10);
-    pollFrequency = std::chrono::nanoseconds(pollFrequencyNs);
+    pollFrequency = std::chrono::nanoseconds(std::chrono::nanoseconds::period::den / pollFrequencyNs);
     if (!(*argv[2] != '\0' && *pollFreqArgEnd == '\0')) {
         return;
     }

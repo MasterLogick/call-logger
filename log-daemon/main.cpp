@@ -7,7 +7,7 @@
 int main(int argc, char **argv) {
     ProgramArgs args(argc, argv);
     if (!args.isInitialized()) {
-        std::cout << "Usage: log-daemon -t poll_frequency_ns -f comma_separated_list_of_calls log_file" << std::endl;
+        std::cout << "Usage: log-daemon -t poll_frequency -f comma_separated_list_of_calls log_file" << std::endl;
         return -1;
     }
     std::ofstream logFile(args.getLogFile());

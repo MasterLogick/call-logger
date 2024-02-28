@@ -1,0 +1,21 @@
+Requirements:
+
+cmake, gcc, g++
+
+Build:
+
+mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE=Debug .. # use debug for test-stand since compiler optimizes open and write calls
+cmake --build .
+
+Run:
+
+log daemon usage:
+./log-daemon -t poll_frequency -f names_of_calls output_file_name
+
+Test stand run:
+
+./log-daemon -t 1000 -f open,read,write,lseek test-io.txt # starts log-daemon for IO
+./log-daemon -t 1000 -f malloc,free,realloc test-mem.txt # starts log-daemon for memory management
+LD_PRELOAD=`pwd`/libinterceptor.so ./test-stand
