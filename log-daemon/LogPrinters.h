@@ -6,6 +6,9 @@
 
 typedef void(*CustomLogPrinter)(LogEntry *, std::ofstream &);
 
+/**
+ * Description for a call log entry text format
+ */
 struct EntryFormatConfig {
     const char *name;
     int argsCount;
@@ -17,6 +20,9 @@ void logEntry(LogEntry *entry, std::ofstream &ofstream);
 
 void logOpen(LogEntry *entry, std::ofstream &ofstream);
 
+/**
+ * Describes text format for all intercepted calls. See also CallId enum
+ */
 constexpr EntryFormatConfig config[] = {
         {"undefined", 0, true,  logEntry},
         {"open",      2, true,  logOpen},

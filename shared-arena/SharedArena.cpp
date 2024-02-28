@@ -9,7 +9,7 @@ SharedArena *SharedArena::createOrConnect(const char *arenaName, uint64_t ringBu
         return nullptr;
     }
     auto arenaSize = sizeof(SharedArena) + sizeof(LogEntry) * ringBufferSize;
-    ftruncate(fd, arenaSize);
+    (void) ftruncate(fd, arenaSize);
     auto *arena = static_cast<SharedArena *>(
             mmap(nullptr, arenaSize, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0));
     if (arena == MAP_FAILED) {
@@ -21,6 +21,10 @@ SharedArena *SharedArena::createOrConnect(const char *arenaName, uint64_t ringBu
     }
     arena->ringBufferSize = ringBufferSize;
     return arena;
+}
+
+SharedArena::~SharedArena() {
+    munmap(this, sizeof(SharedArena) + sizeof(LogEntry) * ringBufferSize);
 }
 
 LogEntry *SharedArena::allocateNextEntry() {

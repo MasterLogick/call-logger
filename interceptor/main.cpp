@@ -3,8 +3,6 @@
 #include <cerrno>
 #include "SharedArena.h"
 
-extern "C" pid_t getpid();
-
 SharedArena *arena = SharedArena::createOrConnect();
 
 typedef uint64_t(*hooked_func)(uint64_t arg0, uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4,
